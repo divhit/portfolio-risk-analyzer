@@ -1,6 +1,6 @@
 import { IncomingForm } from 'formidable';
 import { promises as fs } from 'fs';
-import { LlamaParse } from '../../lib/mock-llama-parse';
+import { LlamaParse } from '../../lib/llama-parse';
 import { VectorStoreIndex, Document, OpenAIEmbedding } from 'llamaindex';
 
 export const config = {
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
     // Read the file
     const fileContent = await fs.readFile(filePath);
 
-    // Parse the PDF using mock LlamaParse
+    // Parse the PDF using LlamaParse API
     const parseResult = await llamaParse.load_data(fileContent);
 
     // Create documents from the parsed result
