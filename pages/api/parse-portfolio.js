@@ -1,8 +1,7 @@
 import { IncomingForm } from 'formidable';
 import { promises as fs } from 'fs';
-import { LlamaParse } from 'llama-parse';
-import { VectorStoreIndex, Document } from '@llama-index/core';
-import { OpenAIEmbedding } from '@llama-index/node';
+import { LlamaParse } from '../../lib/llama_parse/src';
+import { VectorStoreIndex, Document, OpenAIEmbedding } from 'llamaindex';
 
 export const config = {
   api: {
@@ -52,9 +51,9 @@ export default async function handler(req, res) {
 
     res.status(200).json({
       message: 'PDF parsed successfully',
-      riskMetrics: riskMetrics.toString(),
-      sectorExposure: sectorExposure.toString(),
-      majorRiskFactors: majorRiskFactors.toString(),
+      riskMetrics: riskMetrics.response,
+      sectorExposure: sectorExposure.response,
+      majorRiskFactors: majorRiskFactors.response,
     });
   } catch (error) {
     console.error(error);

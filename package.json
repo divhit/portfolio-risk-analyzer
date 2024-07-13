@@ -10,10 +10,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.4.3",
-    "@llama-index/core": "^0.10.6",
-    "@llama-index/node": "^0.1.8",
+    "llamaindex": "^0.0.38",
     "formidable": "^3.5.0",
-    "llama-parse": "^0.1.0",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
