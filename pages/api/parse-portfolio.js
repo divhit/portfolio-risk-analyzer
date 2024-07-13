@@ -1,6 +1,6 @@
 import { IncomingForm } from 'formidable';
 import { promises as fs } from 'fs';
-import { LlamaParse } from '../../lib/llama_parse/src/index.js';
+import { LlamaParse } from '../../lib/llama_parse/src/index';
 import { VectorStoreIndex, Document, OpenAIEmbedding } from 'llamaindex';
 
 export const config = {
