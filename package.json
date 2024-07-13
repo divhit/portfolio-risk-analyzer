@@ -1,0 +1,30 @@
+{
+  "name": "portfolio-risk-analyzer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.4.3",
+    "@llama-index/core": "^0.10.6",
+    "@llama-index/node": "^0.1.8",
+    "formidable": "^3.5.0",
+    "llama-parse": "^0.1.0",
+    "next": "12.2.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "recharts": "^2.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^5.0.0"
+  }
+}
