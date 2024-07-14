@@ -10,9 +10,6 @@ const nextConfig = {
     };
     return config;
   },
-  api: {
-    bodyParser: false,
-  },
 }
 
 module.exports = nextConfig

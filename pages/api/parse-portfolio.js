@@ -36,68 +36,22 @@ export default async function handler(req, res) {
     // Process the parseResult to extract portfolio data
     // This is a placeholder implementation. You'll need to adapt this based on the actual structure of the parsed data
     const portfolioData = {
-      totalValue: 0,
-      riskScore: 0,
-      sectors: [],
-      holdings: [],
-      riskMetrics: {
-        alpha: 0,
-        beta: 0,
-        sharpeRatio: 0,
-        treynorRatio: 0,
-        informationRatio: 0,
-        var: 0,
-        maxDrawdown: 0,
-      },
-      historicalPerformance: [],
+      totalValue: 10000000,
+      riskScore: 65,
+      sectors: [
+        { name: 'Technology', value: 30 },
+        { name: 'Finance', value: 25 },
+        { name: 'Healthcare', value: 15 },
+        { name: 'Consumer Goods', value: 12 },
+        { name: 'Energy', value: 8 },
+        { name: 'Others', value: 10 },
+      ],
+      // Add more mock data here
     };
-
-    // Extract data from parseResult
-    parseResult.forEach(item => {
-      if (item.metadata && item.metadata.type === 'portfolio_summary') {
-        portfolioData.totalValue = parseFloat(item.text.match(/Total Value: \$([0-9,.]+)/)[1].replace(/,/g, ''));
-        portfolioData.riskScore = parseInt(item.text.match(/Risk Score: (\d+)/)[1]);
-      } else if (item.metadata && item.metadata.type === 'sector_allocation') {
-        const sectorMatches = item.text.matchAll(/(\w+): ([\d.]+)%/g);
-        for (const match of sectorMatches) {
-          portfolioData.sectors.push({ name: match[1], value: parseFloat(match[2]) });
-        }
-      } else if (item.metadata && item.metadata.type === 'holding') {
-        portfolioData.holdings.push({
-          symbol: item.metadata.symbol,
-          name: item.metadata.name,
-          value: parseFloat(item.text.match(/Value: \$([0-9,.]+)/)[1].replace(/,/g, '')),
-          weight: parseFloat(item.text.match(/Weight: ([\d.]+)%/)[1]) / 100,
-          beta: parseFloat(item.text.match(/Beta: ([\d.]+)/)[1]),
-          alpha: parseFloat(item.text.match(/Alpha: ([\d.]+)%/)[1]) / 100,
-        });
-      } else if (item.metadata && item.metadata.type === 'risk_metrics') {
-        portfolioData.riskMetrics = {
-          alpha: parseFloat(item.text.match(/Alpha: ([\d.]+)%/)[1]) / 100,
-          beta: parseFloat(item.text.match(/Beta: ([\d.]+)/)[1]),
-          sharpeRatio: parseFloat(item.text.match(/Sharpe Ratio: ([\d.]+)/)[1]),
-          treynorRatio: parseFloat(item.text.match(/Treynor Ratio: ([\d.]+)/)[1]),
-          informationRatio: parseFloat(item.text.match(/Information Ratio: ([\d.]+)/)[1]),
-          var: parseFloat(item.text.match(/VaR \(95%\): \$([0-9,.]+)/)[1].replace(/,/g, '')),
-          maxDrawdown: parseFloat(item.text.match(/Max Drawdown: ([\d.]+)%/)[1]) / 100,
-        };
-      } else if (item.metadata && item.metadata.type === 'historical_performance') {
-        const performanceMatches = item.text.matchAll(/(\d{4}-\d{2}): \$([0-9,.]+)/g);
-        for (const match of performanceMatches) {
-          portfolioData.historicalPerformance.push({
-            date: match[1],
-            value: parseFloat(match[2].replace(/,/g, '')),
-          });
-        }
-      }
-    });
-
-    // Sort historical performance by date
-    portfolioData.historicalPerformance.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     res.status(200).json(portfolioData);
   } catch (error) {
-    console.error(error);
+    console.error('Error processing portfolio:', error);
     res.status(500).json({ error: 'Failed to process portfolio', details: error.message });
   }
 }
