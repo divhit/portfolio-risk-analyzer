@@ -15,6 +15,10 @@ const nextConfig = {
     }
     return config;
   },
+  babel: {
+    presets: ['next/babel'],
+    plugins: [['@babel/plugin-transform-runtime', { regenerator: true }]],
+  },
 };
 
 module.exports = nextConfig;
