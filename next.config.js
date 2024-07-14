@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -13,12 +15,14 @@ const nextConfig = {
         zlib: require.resolve('browserify-zlib'),
       };
     }
+    config.plugins.push(
+      new webpack.ProvidePlugin({
+        'regeneratorRuntime': 'regenerator-runtime',
+      })
+    );
     return config;
   },
-  babel: {
-    presets: ['next/babel'],
-    plugins: [['@babel/plugin-transform-runtime', { regenerator: true }]],
-  },
+  cssModules: true,
 };
 
 module.exports = nextConfig;

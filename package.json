@@ -2,9 +2,6 @@
   "name": "bloomberg-style-portfolio-analyzer",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=16.0.0"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -18,7 +15,9 @@
     "formidable": "^2.0.1",
     "axios": "^0.24.0",
     "regenerator-runtime": "^0.13.9",
-    "@babel/runtime": "^7.15.4"
+    "crypto-browserify": "^3.12.0",
+    "stream-browserify": "^3.0.0",
+    "browserify-zlib": "^0.2.0"
   },
   "devDependencies": {
     "eslint": "7.32.0",
