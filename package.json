@@ -10,23 +10,23 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.4.3",
+    "axios": "^0.27.2",
+    "form-data": "^4.0.0",
+    "formidable": "^3.5.1",
     "llamaindex": "^0.0.38",
-    "formidable": "^3.5.0",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "recharts": "^2.1.13",
-    "axios": "^0.27.2",
-    "form-data": "^4.0.0"
+    "recharts": "^2.1.13"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
     "autoprefixer": "^10.4.14",
+    "eslint": "^8.40.0",
+    "eslint-config-next": "12.2.5",
     "postcss": "^8.4.23",
     "tailwindcss": "^3.3.2",
-    "typescript": "^5.0.0",
-    "eslint": "^8.40.0",
-    "eslint-config-next": "12.2.5"
+    "typescript": "^5.0.0"
   }
 }

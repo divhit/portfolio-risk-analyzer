@@ -33,40 +33,71 @@ export default async function handler(req, res) {
     // Parse the PDF using LlamaParse API
     const parseResult = await llamaParse.load_data(fileContent);
 
-    // For now, we'll return mock data
-    const mockPortfolioData = {
-      totalValue: 1000000,
-      riskScore: 65,
-      sectors: [
-        { name: 'Technology', value: 30 },
-        { name: 'Finance', value: 25 },
-        { name: 'Healthcare', value: 20 },
-        { name: 'Consumer Goods', value: 15 },
-        { name: 'Energy', value: 10 },
-      ],
-      assetAllocation: [
-        { name: 'Stocks', value: 60 },
-        { name: 'Bonds', value: 30 },
-        { name: 'Cash', value: 5 },
-        { name: 'Real Estate', value: 5 },
-      ],
-      historicalPerformance: [
-        { date: '2020-01', value: 800000 },
-        { date: '2020-07', value: 850000 },
-        { date: '2021-01', value: 920000 },
-        { date: '2021-07', value: 980000 },
-        { date: '2022-01', value: 1000000 },
-      ],
-      recommendations: [
-        "Consider diversifying your technology sector holdings to reduce risk.",
-        "Your bond allocation is appropriate for your risk level, but consider increasing it slightly for more stability.",
-        "Look into adding more international exposure to your portfolio for better diversification.",
-      ],
+    // Process the parseResult to extract portfolio data
+    // This is a placeholder implementation. You'll need to adapt this based on the actual structure of the parsed data
+    const portfolioData = {
+      totalValue: 0,
+      riskScore: 0,
+      sectors: [],
+      holdings: [],
+      riskMetrics: {
+        alpha: 0,
+        beta: 0,
+        sharpeRatio: 0,
+        treynorRatio: 0,
+        informationRatio: 0,
+        var: 0,
+        maxDrawdown: 0,
+      },
+      historicalPerformance: [],
     };
 
-    res.status(200).json(mockPortfolioData);
+    // Extract data from parseResult
+    parseResult.forEach(item => {
+      if (item.metadata && item.metadata.type === 'portfolio_summary') {
+        portfolioData.totalValue = parseFloat(item.text.match(/Total Value: \$([0-9,.]+)/)[1].replace(/,/g, ''));
+        portfolioData.riskScore = parseInt(item.text.match(/Risk Score: (\d+)/)[1]);
+      } else if (item.metadata && item.metadata.type === 'sector_allocation') {
+        const sectorMatches = item.text.matchAll(/(\w+): ([\d.]+)%/g);
+        for (const match of sectorMatches) {
+          portfolioData.sectors.push({ name: match[1], value: parseFloat(match[2]) });
+        }
+      } else if (item.metadata && item.metadata.type === 'holding') {
+        portfolioData.holdings.push({
+          symbol: item.metadata.symbol,
+          name: item.metadata.name,
+          value: parseFloat(item.text.match(/Value: \$([0-9,.]+)/)[1].replace(/,/g, '')),
+          weight: parseFloat(item.text.match(/Weight: ([\d.]+)%/)[1]) / 100,
+          beta: parseFloat(item.text.match(/Beta: ([\d.]+)/)[1]),
+          alpha: parseFloat(item.text.match(/Alpha: ([\d.]+)%/)[1]) / 100,
+        });
+      } else if (item.metadata && item.metadata.type === 'risk_metrics') {
+        portfolioData.riskMetrics = {
+          alpha: parseFloat(item.text.match(/Alpha: ([\d.]+)%/)[1]) / 100,
+          beta: parseFloat(item.text.match(/Beta: ([\d.]+)/)[1]),
+          sharpeRatio: parseFloat(item.text.match(/Sharpe Ratio: ([\d.]+)/)[1]),
+          treynorRatio: parseFloat(item.text.match(/Treynor Ratio: ([\d.]+)/)[1]),
+          informationRatio: parseFloat(item.text.match(/Information Ratio: ([\d.]+)/)[1]),
+          var: parseFloat(item.text.match(/VaR \(95%\): \$([0-9,.]+)/)[1].replace(/,/g, '')),
+          maxDrawdown: parseFloat(item.text.match(/Max Drawdown: ([\d.]+)%/)[1]) / 100,
+        };
+      } else if (item.metadata && item.metadata.type === 'historical_performance') {
+        const performanceMatches = item.text.matchAll(/(\d{4}-\d{2}): \$([0-9,.]+)/g);
+        for (const match of performanceMatches) {
+          portfolioData.historicalPerformance.push({
+            date: match[1],
+            value: parseFloat(match[2].replace(/,/g, '')),
+          });
+        }
+      }
+    });
+
+    // Sort historical performance by date
+    portfolioData.historicalPerformance.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    res.status(200).json(portfolioData);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to process portfolio' });
+    res.status(500).json({ error: 'Failed to process portfolio', details: error.message });
   }
 }
